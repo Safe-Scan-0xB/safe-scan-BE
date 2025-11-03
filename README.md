@@ -1,6 +1,12 @@
 <a href="https://club-project-one.vercel.app/" target="_blank">
 <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNTAzMjVfMjEw%2FMDAxNzQyOTA1NjA5ODE2.Q-lhLkYxbFUcCCRvpGJpyVQT4p4b0VfgFdp7cBb7dEsg.bhexs38yN9Z-pZ8_eT_esj0y-rzQZ6MzE_2Kyr1-y88g.JPEG%2FKakaoTalk_20250325_212609816.jpg&type=sc960_832" alt="배너" width="80%"/>
 </a>
+![Auto Assign](https://github.com/Safe-Scan-0xB/demo-repository/actions/workflows/auto-assign.yml/badge.svg)
+
+![Proof HTML](https://github.com/Safe-Scan-0xB/demo-repository/actions/workflows/proof-html.yml/badge.svg)
+
+# Welcome to your organization's demo respository
+This code repository (or "repo") is designed to demonstrate the best GitHub has to offer with the least amount of noise.
 
 <br/>
 <br/>
