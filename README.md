@@ -1,12 +1,6 @@
 <a href="https://club-project-one.vercel.app/" target="_blank">
-<img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNTAzMjVfMjEw%2FMDAxNzQyOTA1NjA5ODE2.Q-lhLkYxbFUcCCRvpGJpyVQT4p4b0VfgFdp7cBb7dEsg.bhexs38yN9Z-pZ8_eT_esj0y-rzQZ6MzE_2Kyr1-y88g.JPEG%2FKakaoTalk_20250325_212609816.jpg&type=sc960_832" alt="배너" width="80%"/>
+<img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNTAzMjVfMjEw%2FMDAxNzQyOTA1NjA5ODE2.Q-lhLkYxbFUcCCRvpGJpyVQT4p4b0VfgFdp7cBb7dEsg.bhexs38yN9Z-pZ8_eT_esj0y-rzQZ6MzE_2Kyr1-y88g.JPEG%2FKakaoTalk_20250325_212609816.jpg&type=sc960_832" alt="배너" width="70%"/>
 </a>
-![Auto Assign](https://github.com/Safe-Scan-0xB/demo-repository/actions/workflows/auto-assign.yml/badge.svg)
-
-![Proof HTML](https://github.com/Safe-Scan-0xB/demo-repository/actions/workflows/proof-html.yml/badge.svg)
-
-# Welcome to your organization's demo respository
-This code repository (or "repo") is designed to demonstrate the best GitHub has to offer with the least amount of noise.
 
 <br/>
 <br/>
@@ -209,5 +203,3 @@ UI개발을 위한 라이브러리 styled-components 설치
 <br/>
 
 # 10. 컨벤션 수행 결과
-<img width="100%" alt="코드 컨벤션" src="https://github.com/user-attachments/assets/0dc218c0-369f-45d2-8c6d-cdedc81169b4">
-<img width="100%" alt="깃플로우" src="https://github.com/user-attachments/assets/2a4d1332-acc2-4292-9815-d122f5aea77c">
