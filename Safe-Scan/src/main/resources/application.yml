@@ -11,7 +11,7 @@ spring:
   # === Supabase PostgreSQL 연결 ===
   datasource:
     url: jdbc:postgresql://aws-1-ap-northeast-2.pooler.supabase.com:5432/postgres
-    username: postgres.aozsbnllhqsudbdwexxy
+    username:
     password:
     driver-class-name: org.postgresql.Driver
 
