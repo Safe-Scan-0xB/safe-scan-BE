@@ -12,7 +12,7 @@ spring:
   datasource:
     url: jdbc:postgresql://aws-1-ap-northeast-2.pooler.supabase.com:5432/postgres
     username: postgres.aozsbnllhqsudbdwexxy
-    password: ganji123@
+    password:
     driver-class-name: org.postgresql.Driver
 
     # 커넥션 풀 (Hikari)
