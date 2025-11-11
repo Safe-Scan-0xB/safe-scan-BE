@@ -3,7 +3,6 @@
 *.iml
 .vscode/
 .DS_Store
-Thumbs.db
 
 # === Build / Output ===
 build/
@@ -11,6 +10,10 @@ out/
 target/
 dist/
 *.log
+
+# 하위 모듈 내 build 및 gradle 캐시도 무시
+**/build/
+**/.gradle/
 
 # === Environment / Secrets ===
 .env
@@ -23,6 +26,3 @@ node_modules/
 
 # === OS / Misc ===
 Thumbs.db
-
-# Gradle cache
-.gradle/
