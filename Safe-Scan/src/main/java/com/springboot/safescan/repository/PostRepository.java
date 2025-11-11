@@ -8,13 +8,31 @@ import org.springframework.data.repository.query.Param;
 
 public interface PostRepository extends JpaRepository<CommunityPost, Long> {
 
-    @Query("""
-        select p from CommunityPost p
-        where (:category is null or p.category = :category)
-          and (:q is null or lower(p.title) like lower(concat('%', :q, '%'))
-                      or lower(p.content) like lower(concat('%', :q, '%')))
-        """)
-    Page<CommunityPost> search(@Param("category") Category category,
-                               @Param("q") String q,
-                               Pageable pageable);
+    @Query(
+            value = """
+        SELECT *
+        FROM community_posts p
+        WHERE (:categoryId IS NULL OR p.category_id = :categoryId)
+          AND (
+            :pattern IS NULL
+            OR p.title   ILIKE :pattern
+            OR p.content ILIKE :pattern
+          )
+        ORDER BY p.created_at DESC
+      """,
+            countQuery = """
+        SELECT count(*)
+        FROM community_posts p
+        WHERE (:categoryId IS NULL OR p.category_id = :categoryId)
+          AND (
+            :pattern IS NULL
+            OR p.title   ILIKE :pattern
+            OR p.content ILIKE :pattern
+          )
+      """,
+            nativeQuery = true
+    )
+    Page<CommunityPost> searchNative(@Param("categoryId") Long categoryId,
+                                     @Param("pattern") String pattern,
+                                     Pageable pageable);
 }
