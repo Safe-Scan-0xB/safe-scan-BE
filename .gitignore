@@ -5,7 +5,7 @@
 .DS_Store
 
 # === Build / Output ===
-build/
+Safe-Scan/build/
 out/
 target/
 dist/
