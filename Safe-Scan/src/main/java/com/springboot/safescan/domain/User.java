@@ -9,7 +9,7 @@ public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;                    // 유저아이디 (Auto)
 
-    @Column(name = "userId", length = 50, nullable = false, unique = true)
+    @Column(name = "user_id", length = 50, nullable = false, unique = true)
     private String userId;             // 로그인 ID
 
     @Column(name = "password", length = 100, nullable = false)

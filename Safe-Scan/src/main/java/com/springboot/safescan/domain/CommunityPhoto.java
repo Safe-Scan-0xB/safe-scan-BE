@@ -10,12 +10,12 @@ public class CommunityPhoto {
     private Long id; // 사진아이디
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "postId", nullable = false)
+    @JoinColumn(name = "post_id", nullable = false)
     private CommunityPost post;
 
     @Column(name = "url", nullable = false, length = 1000)
     private String url;
 
-    @Column(name = "sortOrder", nullable = false)
+    @Column(name = "sort_order", nullable = false)
     private int sortOrder; // 업로드 순서 보장용
 }
