@@ -1,10 +1,9 @@
 package com.springboot.safescan.service.impl;
 
 
-import com.springboot.safescan.domain.CommunityPost;
-import com.springboot.safescan.dto.CommentResponse;
-import com.springboot.safescan.dto.PostCreateRequest;
-import com.springboot.safescan.dto.PostDetailResponse;
+import com.springboot.safescan.domain.*;
+import com.springboot.safescan.dto.*;
+import com.springboot.safescan.mapper.PostMapper;
 import com.springboot.safescan.repository.*;
 import com.springboot.safescan.service.PostService;
 import com.springboot.safescan.service.port.ImageStoragePort;
@@ -32,7 +31,7 @@ public class PostServiceImpl implements PostService {
     public Long createPost(PostCreateRequest req) {
         var category = categoryRepository.findById(req.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("카테고리가 존재하지 않습니다."));
-        var user = userRepository.findByUserId(req.getWriterUserId())
+        var user = userRepository.findByUserId(req.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("작성 유저가 존재하지 않습니다."));
 
         var post = new CommunityPost();
@@ -78,7 +77,7 @@ public class PostServiceImpl implements PostService {
         res.setCreatedAt(post.getCreatedAt());
         res.setViewCount(post.getViewCount());
         res.setCommentCount((int) commentRepository.countByPost(post));
-        res.setWriterUserId(post.getUser().getUserId());
+        res.setUserId(post.getUser().getUserId());
         res.setImageUrls(imageUrls);
         res.setComments(comments);
         return res;
@@ -86,14 +85,15 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PageResponse<PostSummaryResponse> listPosts(Long categoryId, String q, Pageable pageable) {
-        Category category = null;
-        if (categoryId != null) {
-            category = categoryRepository.findById(categoryId)
-                    .orElseThrow(() -> new IllegalArgumentException("카테고리가 존재하지 않습니다."));
+        String pattern = null;
+        if (q != null) {
+            q = q.trim();
+            if (!q.isEmpty()) {
+                pattern = "%" + q + "%";  // ← 한 글자여도 부분 일치
+            }
         }
-        String query = StringUtils.hasText(q) ? q.trim() : null;
 
-        Page<CommunityPost> page = postRepository.search(category, query, pageable);
+        Page<CommunityPost> page = postRepository.searchNative(categoryId, pattern, pageable);
 
         var content = page.getContent().stream().map(p -> {
             int commentCount = (int) commentRepository.countByPost(p);
@@ -110,7 +110,7 @@ public class PostServiceImpl implements PostService {
     public Long addComment(CommentCreateRequest req) {
         var post = postRepository.findById(req.getPostId())
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
-        var user = userRepository.findByUserId(req.getWriterUserId())
+        var user = userRepository.findByUserId(req.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("댓글 유저가 존재하지 않습니다."));
 
         var c = new CommunityComment();

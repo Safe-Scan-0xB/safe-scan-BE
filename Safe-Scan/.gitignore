@@ -1,10 +1,28 @@
-cat > .gitignore <<'EOF'
+# === IDE / Editor ===
 .idea/
 *.iml
-node_modules/
+.vscode/
 .DS_Store
+Thumbs.db
+
+# === Build / Output ===
 build/
 out/
 target/
 dist/
-EOF
+*.log
+
+# === Environment / Secrets ===
+.env
+*.env
+application-secret.yml
+application-prod.yml
+
+# === Node (if front connected) ===
+node_modules/
+
+# === OS / Misc ===
+Thumbs.db
+
+# Gradle cache
+.gradle/

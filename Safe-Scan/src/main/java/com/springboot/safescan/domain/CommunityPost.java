@@ -13,11 +13,11 @@ public class CommunityPost {
     private Long id;    // 게시글아이디 (Auto)
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoryId", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;         // 카테고리 아이디
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;                 // 유저아이디 (작성자)
 
     @Column(name = "title", length = 100, nullable = false)
@@ -27,10 +27,10 @@ public class CommunityPost {
     private String content;
 
     @CreationTimestamp
-    @Column(name = "createdAt", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "viewCount", nullable = false)
+    @Column(name = "view_count", nullable = false)
     private int viewCount = 0;
 
     public void increaseView() { this.viewCount++; }
