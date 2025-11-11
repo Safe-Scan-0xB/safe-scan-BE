@@ -1,21 +1,14 @@
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
 
 spring:
-  # (선택) 파일 업로드 용량
-#  servlet:
-#    multipart:
-#      max-file-size: 10MB
-#      max-request-size: 100MB
-
-  # === Supabase PostgreSQL 연결 ===
+  config:
+    import: optional:file:.env[.properties]
   datasource:
-    url: jdbc:postgresql://aws-1-ap-northeast-2.pooler.supabase.com:5432/postgres
-    username:
-    password:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
-
-    # 커넥션 풀 (Hikari)
     hikari:
       maximum-pool-size: 10
       minimum-idle: 2
@@ -25,7 +18,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update   # 개발: update / 운영: validate 또는 none 권장
+      ddl-auto: ${HIBERNATE_DDL:update}
     open-in-view: false
     properties:
       hibernate:
