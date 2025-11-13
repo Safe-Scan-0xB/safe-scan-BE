@@ -7,13 +7,18 @@ import com.springboot.safescan.mapper.PostMapper;
 import com.springboot.safescan.repository.*;
 import com.springboot.safescan.service.PostService;
 import com.springboot.safescan.service.port.ImageStoragePort;
+import com.springboot.safescan.util.DateUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
+import static com.springboot.safescan.service.impl.PostServiceImpl.SecurityUtil.getCurrentUserId;
 
 @Service
 @RequiredArgsConstructor
@@ -29,9 +34,11 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Long createPost(PostCreateRequest req) {
+        String loginUserId = getCurrentUserId();
         var category = categoryRepository.findById(req.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("카테고리가 존재하지 않습니다."));
-        var user = userRepository.findByUserId(req.getUserId())
+
+        var user = userRepository.findByUserId(loginUserId)
                 .orElseThrow(() -> new IllegalArgumentException("작성 유저가 존재하지 않습니다."));
 
         var post = new CommunityPost();
@@ -41,7 +48,6 @@ public class PostServiceImpl implements PostService {
         post.setContent(req.getContent());
         post = postRepository.save(post);
 
-        // 이미지 저장(최대 9장)
         if (req.getImages() != null) {
             int order = 0;
             for (var file : req.getImages()) {
@@ -74,7 +80,7 @@ public class PostServiceImpl implements PostService {
         res.setTitle(post.getTitle());
         res.setContent(post.getContent());
         res.setCategoryName(post.getCategory().getCategoryName());
-        res.setCreatedAt(post.getCreatedAt());
+        res.setCreatedAt(DateUtils.format(post.getCreatedAt()));
         res.setViewCount(post.getViewCount());
         res.setCommentCount((int) commentRepository.countByPost(post));
         res.setUserId(post.getUser().getUserId());
@@ -106,19 +112,35 @@ public class PostServiceImpl implements PostService {
                 page.getNumber(), page.getSize(), page.hasNext());
     }
 
-    @Override
-    public Long addComment(CommentCreateRequest req) {
-        var post = postRepository.findById(req.getPostId())
+    public void deletePost(Long postId) {
+        String loginUserId = getCurrentUserId();
+        var post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
-        var user = userRepository.findByUserId(req.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("댓글 유저가 존재하지 않습니다."));
 
-        var c = new CommunityComment();
-        c.setPost(post);
-        c.setUser(user);
-        c.setContent(req.getContent());
-        c = commentRepository.save(c);
-        return c.getId();
+        if (!post.getUser().getUserId().equals(loginUserId)) {
+            throw new AccessDeniedException("본인 게시글만 삭제할 수 있습니다.");
+        }
+
+        postRepository.delete(post);
+    }
+
+    @Override
+    public Long addComment(Long postId, String content) {
+        String loginUserId = getCurrentUserId();
+        var post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
+
+        var user = userRepository.findByUserId(loginUserId)
+                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+
+        var comment = new CommunityComment();
+        comment.setPost(post);
+        comment.setUser(user);
+        comment.setContent(content);
+
+        commentRepository.save(comment);
+
+        return comment.getId();
     }
 
     @Override
@@ -129,5 +151,60 @@ public class PostServiceImpl implements PostService {
         var content = page.getContent().stream().map(PostMapper::toCommentDto).toList();
         return new PageResponse<>(content, page.getTotalElements(), page.getTotalPages(),
                 page.getNumber(), page.getSize(), page.hasNext());
+    }
+
+    @Override
+    public void updatePost(Long postId, PostUpdateRequest req) {
+        var post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
+
+        String loginUserId = getCurrentUserId();
+        // 작성자 체크
+        if (!post.getUser().getUserId().equals(loginUserId)) {
+            throw new RuntimeException("본인 게시글만 수정할 수 있습니다.");
+        }
+
+        // 부분 수정(PATCH): null 아닌 필드만 반영
+        if (req.getTitle() != null) {
+            post.setTitle(req.getTitle());
+        }
+        if (req.getContent() != null) {
+            post.setContent(req.getContent());
+        }
+        if (req.getCategoryId() != null) {
+            var category = categoryRepository.findById(req.getCategoryId())
+                    .orElseThrow(() -> new IllegalArgumentException("카테고리가 존재하지 않습니다."));
+            post.setCategory(category);
+        }
+        // JPA @Transactional 라서 save 호출 안 해도 dirty checking으로 업데이트됨
+    }
+
+    @Override
+    public void deleteComment(Long postId, Long commentId) {
+        String loginUserId = getCurrentUserId();
+        var comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
+
+        // URL 의 postId 와 실제 댓글의 postId 가 맞는지 검증
+        if (!comment.getPost().getId().equals(postId)) {
+            throw new IllegalArgumentException("게시글/댓글 정보가 일치하지 않습니다.");
+        }
+
+        if (!comment.getUser().getUserId().equals(loginUserId)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "본인 댓글만 삭제할 수 있습니다.");
+        }
+
+        commentRepository.delete(comment);
+    }
+
+    class SecurityUtil {
+
+        static String getCurrentUserId() {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if (auth == null || auth.getPrincipal() == null) {
+                throw new RuntimeException("인증되지 않은 사용자입니다.");
+            }
+            return auth.getPrincipal().toString(); // JwtAuthenticationFilter에서 넣어준 memberId
+        }
     }
 }
