@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PhishingApiResponse {
-    private String phising_url;
-    private Long urlCount;
+    private String phishing_url;
+    private Long url_count;
 }

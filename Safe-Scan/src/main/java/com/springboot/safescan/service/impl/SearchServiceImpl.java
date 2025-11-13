@@ -23,30 +23,34 @@ public class SearchServiceImpl implements SearchService {
     @Value("${phishing.api.key}")
     private String apiKey;
 
+    // ===== JSON 구조 =====
+    record Item(
+            @JsonProperty("날짜") String date,
+            @JsonProperty("홈페이지주소") String homepage
+    ) {}
+
+    record ApiResponse(
+            @JsonProperty("data") List<Item> data
+    ) {}
+
     @Override
     public SearchResponse searchUrl(String targetUrl) {
 
+        // -------- 요청 URL 생성 --------
         String requestUrl = UriComponentsBuilder.fromHttpUrl(apiUrl)
                 .queryParam("serviceKey", apiKey)
-                .queryParam("returnType", "JSON")
-                .queryParam("numOfRows", 9999)
+                .queryParam("page", 1)
+                .queryParam("perPage", 10000)
                 .toUriString();
 
-        // 공공데이터포털 API JSON 구조에 맞는 record 정의
-        record Item(@JsonProperty("홈페이지주소") String homepage) {}
-        record Items(@JsonProperty("item") List<Item> item) {}
-        record Body(@JsonProperty("items") Items items) {}
-        record Response(@JsonProperty("body") Body body) {}
-        record ApiResponse(@JsonProperty("response") Response response) {}
+        // -------- 디버그용 출력 --------
+        System.out.println("=== KISA API Request URL ===");
+        System.out.println(requestUrl);
 
+        // -------- API 호출 --------
         ApiResponse response = restTemplate.getForObject(requestUrl, ApiResponse.class);
 
-        if (response == null ||
-                response.response() == null ||
-                response.response().body() == null ||
-                response.response().body().items() == null ||
-                response.response().body().items().item() == null) {
-
+        if (response == null || response.data() == null) {
             return SearchResponse.builder()
                     .phishing_url(targetUrl)
                     .url_count(0L)
@@ -54,28 +58,14 @@ public class SearchServiceImpl implements SearchService {
                     .build();
         }
 
-        List<Item> items = response.response().body().items().item();
+        List<Item> items = response.data();
+
+        // 타겟 URL 정규화
+        String normalizedTarget = normalize(targetUrl);
 
         long count = items.stream()
-                .filter(item -> {
-                    if (item.homepage() == null) return false;
-
-                    String homepage = item.homepage()
-                            .replaceAll("\\s+", "")
-                            .replace("https://", "")
-                            .replace("http://", "")
-                            .trim()
-                            .toLowerCase();
-
-                    String normalizedTarget = targetUrl
-                            .replaceAll("\\s+", "")
-                            .replace("https://", "")
-                            .replace("http://", "")
-                            .trim()
-                            .toLowerCase();
-
-                    return homepage.contains(normalizedTarget);
-                })
+                .filter(item -> item.homepage() != null &&
+                        normalize(item.homepage()).contains(normalizedTarget))
                 .count();
 
         String state = count > 0 ? "위험" : "안전";
@@ -85,5 +75,13 @@ public class SearchServiceImpl implements SearchService {
                 .url_count(count)
                 .state(state)
                 .build();
+    }
+
+    private String normalize(String url) {
+        return url.replaceAll("\\s+", "")
+                .replace("https://", "")
+                .replace("http://", "")
+                .trim()
+                .toLowerCase();
     }
 }
