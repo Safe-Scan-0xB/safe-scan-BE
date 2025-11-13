@@ -23,7 +23,6 @@ public class SearchServiceImpl implements SearchService {
     @Value("${phishing.api.key}")
     private String apiKey;
 
-    // ===== JSON 구조 =====
     record Item(
             @JsonProperty("날짜") String date,
             @JsonProperty("홈페이지주소") String homepage
@@ -36,18 +35,13 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public SearchResponse searchUrl(String targetUrl) {
 
-        // -------- 요청 URL 생성 --------
         String requestUrl = UriComponentsBuilder.fromHttpUrl(apiUrl)
                 .queryParam("serviceKey", apiKey)
                 .queryParam("page", 1)
                 .queryParam("perPage", 10000)
                 .toUriString();
 
-        // -------- 디버그용 출력 --------
-        System.out.println("=== KISA API Request URL ===");
-        System.out.println(requestUrl);
-
-        // -------- API 호출 --------
+        // API 호출
         ApiResponse response = restTemplate.getForObject(requestUrl, ApiResponse.class);
 
         if (response == null || response.data() == null) {

@@ -17,6 +17,6 @@ public class PostDetailResponse {
     private int viewCount;
     private int commentCount;
     private String userId;
-    private List<String> imageUrls;
+    private List<ImageInfoResponse> images;
     private List<CommentResponse> comments;
 }

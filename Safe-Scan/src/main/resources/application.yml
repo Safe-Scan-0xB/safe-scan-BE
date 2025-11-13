@@ -4,6 +4,7 @@ server:
 spring:
   config:
     import: optional:file:.env[.properties]
+
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
@@ -27,7 +28,6 @@ spring:
 
   jackson:
     time-zone: Asia/Seoul
-    property-naming-strategy: SNAKE_CASE
 
 logging:
   level:
@@ -36,5 +36,5 @@ logging:
 
 phishing:
   api:
-      url: "https://api.odcloud.kr/api/15109780/v1/uddi:707478dd-938f-4155-badb-fae6202ee7ed"
-      key: ${PHISHING_API_KEY}
+    url: "https://api.odcloud.kr/api/15109780/v1/uddi:707478dd-938f-4155-badb-fae6202ee7ed"
+    key: ${PHISHING_API_KEY}

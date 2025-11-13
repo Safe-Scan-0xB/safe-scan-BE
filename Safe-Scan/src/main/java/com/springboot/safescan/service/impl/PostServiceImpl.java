@@ -1,6 +1,5 @@
 package com.springboot.safescan.service.impl;
 
-
 import com.springboot.safescan.domain.*;
 import com.springboot.safescan.dto.*;
 import com.springboot.safescan.mapper.PostMapper;
@@ -17,6 +16,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.springboot.safescan.service.impl.PostServiceImpl.SecurityUtil.getCurrentUserId;
 
@@ -69,11 +71,17 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
         post.increaseView();
 
-        var imageUrls = photoRepository.findAllByPostOrderBySortOrderAsc(post)
-                .stream().map(CommunityPhoto::getUrl).toList();
+        var photos = photoRepository.findAllByPostOrderBySortOrderAsc(post);
+        var imageDtos = photos.stream().map(photo -> {
+            var dto = new ImageInfoResponse();
+            dto.setId(photo.getId());
+            dto.setUrl(photo.getUrl());
+            return dto;
+        }).collect(Collectors.toList());
 
         var comments = commentRepository.findTop20ByPostOrderByIdDesc(post)
-                .stream().map(PostMapper::toCommentDto).toList();
+                .stream().map(PostMapper::toCommentDto)
+                .collect(Collectors.toList());
 
         var res = new PostDetailResponse();
         res.setId(post.getId());
@@ -84,8 +92,9 @@ public class PostServiceImpl implements PostService {
         res.setViewCount(post.getViewCount());
         res.setCommentCount((int) commentRepository.countByPost(post));
         res.setUserId(post.getUser().getUserId());
-        res.setImageUrls(imageUrls);
+        res.setImages(imageDtos);
         res.setComments(comments);
+
         return res;
     }
 
@@ -95,7 +104,7 @@ public class PostServiceImpl implements PostService {
         if (q != null) {
             q = q.trim();
             if (!q.isEmpty()) {
-                pattern = "%" + q + "%";  // ← 한 글자여도 부분 일치
+                pattern = "%" + q + "%";
             }
         }
 
@@ -159,24 +168,66 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
 
         String loginUserId = getCurrentUserId();
-        // 작성자 체크
         if (!post.getUser().getUserId().equals(loginUserId)) {
             throw new RuntimeException("본인 게시글만 수정할 수 있습니다.");
         }
 
-        // 부분 수정(PATCH): null 아닌 필드만 반영
-        if (req.getTitle() != null) {
-            post.setTitle(req.getTitle());
-        }
-        if (req.getContent() != null) {
-            post.setContent(req.getContent());
-        }
+        // ----- 1) 텍스트 업데이트 -----
+        if (req.getTitle() != null) post.setTitle(req.getTitle());
+        if (req.getContent() != null) post.setContent(req.getContent());
         if (req.getCategoryId() != null) {
             var category = categoryRepository.findById(req.getCategoryId())
                     .orElseThrow(() -> new IllegalArgumentException("카테고리가 존재하지 않습니다."));
             post.setCategory(category);
         }
-        // JPA @Transactional 라서 save 호출 안 해도 dirty checking으로 업데이트됨
+
+        // ----- 2) 이미지 처리 -----
+        if (req.getKeepPhotoIds() != null || req.getNewImages() != null) {
+            handleImagesUpdate(post, req);
+        }
+    }
+
+    private void handleImagesUpdate(CommunityPost post, PostUpdateRequest req) {
+        var existingPhotos = photoRepository.findAllByPostOrderBySortOrderAsc(post);
+
+        var keepIds = req.getKeepPhotoIds();
+        boolean hasKeepRule = (keepIds != null);
+
+        List<CommunityPhoto> photosToKeep;
+        if (hasKeepRule) {
+            var keepIdSet = new java.util.HashSet<Long>(keepIds);
+            photosToKeep = existingPhotos.stream()
+                    .filter(p -> keepIdSet.contains(p.getId()))
+                    .toList();
+        } else {
+            photosToKeep = existingPhotos;
+        }
+
+        if (hasKeepRule) {
+            var toDelete = existingPhotos.stream()
+                    .filter(p -> !photosToKeep.contains(p))
+                    .toList();
+            photoRepository.deleteAllInBatch(toDelete);
+        }
+
+        int order = 0;
+        for (var photo : photosToKeep) {
+            photo.setSortOrder(order++);
+        }
+
+        if (req.getNewImages() != null) {
+            for (var file : req.getNewImages()) {
+                if (file == null || file.isEmpty()) continue;
+
+                var url = imageStoragePort.store(file);
+
+                var photo = new CommunityPhoto();
+                photo.setPost(post);
+                photo.setUrl(url);
+                photo.setSortOrder(order++);
+                photoRepository.save(photo);
+            }
+        }
     }
 
     @Override
@@ -185,7 +236,6 @@ public class PostServiceImpl implements PostService {
         var comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
 
-        // URL 의 postId 와 실제 댓글의 postId 가 맞는지 검증
         if (!comment.getPost().getId().equals(postId)) {
             throw new IllegalArgumentException("게시글/댓글 정보가 일치하지 않습니다.");
         }
@@ -204,7 +254,7 @@ public class PostServiceImpl implements PostService {
             if (auth == null || auth.getPrincipal() == null) {
                 throw new RuntimeException("인증되지 않은 사용자입니다.");
             }
-            return auth.getPrincipal().toString(); // JwtAuthenticationFilter에서 넣어준 memberId
+            return auth.getPrincipal().toString();
         }
     }
 }

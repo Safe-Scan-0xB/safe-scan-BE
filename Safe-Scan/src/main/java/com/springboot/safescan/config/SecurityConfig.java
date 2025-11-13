@@ -2,7 +2,6 @@ package com.springboot.safescan.config;
 
 import com.springboot.safescan.security.JwtAuthenticationFilter;
 import com.springboot.safescan.security.JwtTokenProvider;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,7 +26,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // === Swagger UI 허용 ===
+                        // Swagger 허용
                         .requestMatchers(
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
@@ -35,14 +34,14 @@ public class SecurityConfig {
                                 "/v3/api-docs.yaml"
                         ).permitAll()
 
-                        // === 인증 불필요 ===
+                        // 인증 불필요 (로그인/회원가입)
                         .requestMatchers("/api/auth/**").permitAll()
 
-                        // === GET 허용 (게시글, 댓글) ===
+                        // GET 조회는 누구나 접근 가능
                         .requestMatchers(HttpMethod.GET, "/api/posts/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
 
-                        // === 나머지는 인증 필요 ===
+                        // 그 외 모든 요청은 인증 필요
                         .anyRequest().authenticated()
                 )
                 // JWT 필터

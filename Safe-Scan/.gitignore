@@ -36,8 +36,8 @@ out/
 ### VS Code ###
 .vscode/
 
-###env file
-.env
-
 ### Local upload files ###
 uploads/
+
+###env file
+.env

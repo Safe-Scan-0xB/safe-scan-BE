@@ -1,6 +1,5 @@
 package com.springboot.safescan.controller;
 
-
 import com.springboot.safescan.dto.*;
 import com.springboot.safescan.service.PostService;
 import jakarta.validation.Valid;
@@ -10,6 +9,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -41,10 +43,10 @@ public class PostController {
         return postService.listPosts(categoryId, q, PageRequest.of(page, Math.min(size, 50)));
     }
 
-    // 게시글 수정
-    @PatchMapping("/{postId}")
+    // 게시글 수정 (이미지 포함)
+    @PatchMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void updatePost(@PathVariable Long postId,
-                           @RequestBody PostUpdateRequest req) {
+                           @ModelAttribute PostUpdateRequest req) {
         postService.updatePost(postId, req);
     }
 
@@ -62,6 +64,7 @@ public class PostController {
 
         return postService.addComment(postId, req.getContent());
     }
+
     // 댓글 목록
     @GetMapping("/{postId}/comments")
     public PageResponse<CommentResponse> listComments(
