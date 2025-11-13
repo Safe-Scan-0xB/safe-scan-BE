@@ -6,6 +6,7 @@ import com.springboot.safescan.domain.CommunityComment;
 import com.springboot.safescan.domain.CommunityPost;
 import com.springboot.safescan.dto.CommentResponse;
 import com.springboot.safescan.dto.PostSummaryResponse;
+import com.springboot.safescan.util.DateUtils;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class PostMapper {
         dto.setId(p.getId());
         dto.setTitle(p.getTitle());
         dto.setExcerpt(p.getContent().length() <= 40 ? p.getContent() : p.getContent().substring(0, 40) + "...");
-        dto.setCreatedAt(p.getCreatedAt());
+        dto.setCreatedAt(DateUtils.format(p.getCreatedAt()));
         dto.setViewCount(p.getViewCount());
         dto.setCommentCount(commentCount);
         dto.setCategoryName(categoryName);
@@ -29,7 +30,7 @@ public class PostMapper {
         dto.setId(c.getId());
         dto.setContent(c.getContent());
         dto.setUserId(c.getUser().getUserId());
-        dto.setCreatedAt(c.getCreatedAt());
+        dto.setCreatedAt(DateUtils.format(c.getCreatedAt()));
         return dto;
     }
 }
