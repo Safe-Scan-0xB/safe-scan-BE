@@ -7,7 +7,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -18,7 +20,8 @@ public class PostController {
 
     // 게시글 등록 (이미지 포함)
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Long create(@Valid @ModelAttribute PostCreateRequest req) {
+    public Long create(@Valid @ModelAttribute PostCreateRequest req, Authentication auth) {
+        String loginUserId = (String) auth.getPrincipal(); // JWT에서 세팅했던 subject
         return postService.createPost(req);
     }
 
@@ -38,14 +41,27 @@ public class PostController {
         return postService.listPosts(categoryId, q, PageRequest.of(page, Math.min(size, 50)));
     }
 
-    // 댓글 등록
-    @PostMapping("/{postId}/comments")
-    public Long addComment(@PathVariable Long postId, @Valid @RequestBody CommentCreateRequest req) {
-        // path의 postId를 본문과 맞춰 안전하게 사용하려면 다음 라인 추가 가능:
-        if (!postId.equals(req.getPostId())) throw new IllegalArgumentException("postId 불일치");
-        return postService.addComment(req);
+    // 게시글 수정
+    @PatchMapping("/{postId}")
+    public void updatePost(@PathVariable Long postId,
+                           @RequestBody PostUpdateRequest req) {
+        postService.updatePost(postId, req);
     }
 
+    // 게시글 삭제
+    @DeleteMapping("/{id}")
+    public void deletePost(@PathVariable Long id,
+                           @AuthenticationPrincipal String loginUserId) {
+        postService.deletePost(id);
+    }
+
+    // 댓글 등록
+    @PostMapping("/{postId}/comments")
+    public Long addComment(@PathVariable Long postId,
+                           @Valid @RequestBody CommentCreateRequest req) {
+
+        return postService.addComment(postId, req.getContent());
+    }
     // 댓글 목록
     @GetMapping("/{postId}/comments")
     public PageResponse<CommentResponse> listComments(
@@ -53,5 +69,12 @@ public class PostController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
         return postService.listComments(postId, PageRequest.of(page, Math.min(size, 50)));
+    }
+
+    // 댓글 삭제
+    @DeleteMapping("/{postId}/comments/{commentId}")
+    public void deleteComment(@PathVariable Long postId,
+                              @PathVariable Long commentId) {
+        postService.deleteComment(postId, commentId);
     }
 }
