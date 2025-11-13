@@ -10,6 +10,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -42,9 +45,9 @@ public class PostController {
     }
 
     // 게시글 수정
-    @PatchMapping("/{postId}")
+    @PatchMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void updatePost(@PathVariable Long postId,
-                           @RequestBody PostUpdateRequest req) {
+                           @ModelAttribute PostUpdateRequest req) {
         postService.updatePost(postId, req);
     }
 

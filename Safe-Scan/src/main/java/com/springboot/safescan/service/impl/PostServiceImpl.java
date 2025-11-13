@@ -18,6 +18,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.springboot.safescan.service.impl.PostServiceImpl.SecurityUtil.getCurrentUserId;
 
 @Service
@@ -69,11 +72,17 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
         post.increaseView();
 
-        var imageUrls = photoRepository.findAllByPostOrderBySortOrderAsc(post)
-                .stream().map(CommunityPhoto::getUrl).toList();
+        var photos = photoRepository.findAllByPostOrderBySortOrderAsc(post);
+        var imageDtos = photos.stream().map(photo -> {
+            var dto = new ImageInfoResponse();
+            dto.setId(photo.getId());
+            dto.setUrl(photo.getUrl());
+            return dto;
+        }).collect(Collectors.toList());
 
         var comments = commentRepository.findTop20ByPostOrderByIdDesc(post)
-                .stream().map(PostMapper::toCommentDto).toList();
+                .stream().map(PostMapper::toCommentDto)
+                .collect(Collectors.toList());
 
         var res = new PostDetailResponse();
         res.setId(post.getId());
@@ -84,8 +93,9 @@ public class PostServiceImpl implements PostService {
         res.setViewCount(post.getViewCount());
         res.setCommentCount((int) commentRepository.countByPost(post));
         res.setUserId(post.getUser().getUserId());
-        res.setImageUrls(imageUrls);
+        res.setImages(imageDtos);  // 변경됨
         res.setComments(comments);
+
         return res;
     }
 
@@ -159,12 +169,11 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
 
         String loginUserId = getCurrentUserId();
-        // 작성자 체크
         if (!post.getUser().getUserId().equals(loginUserId)) {
             throw new RuntimeException("본인 게시글만 수정할 수 있습니다.");
         }
 
-        // 부분 수정(PATCH): null 아닌 필드만 반영
+        // ====== 1) 텍스트 필드 PATCH ======
         if (req.getTitle() != null) {
             post.setTitle(req.getTitle());
         }
@@ -176,7 +185,66 @@ public class PostServiceImpl implements PostService {
                     .orElseThrow(() -> new IllegalArgumentException("카테고리가 존재하지 않습니다."));
             post.setCategory(category);
         }
-        // JPA @Transactional 라서 save 호출 안 해도 dirty checking으로 업데이트됨
+
+        // ====== 2) 이미지 처리 ======
+        // req.getKeepPhotoIds() == null 이면 "이미지는 건드리지 않음"
+        if (req.getKeepPhotoIds() != null || req.getNewImages() != null) {
+            handleImagesUpdate(post, req);
+        }
+    }
+
+    private void handleImagesUpdate(CommunityPost post, PostUpdateRequest req) {
+        // 1) 기존 이미지 목록 조회
+        var existingPhotos = photoRepository.findAllByPostOrderBySortOrderAsc(post);
+
+        // 2) 유지할 ID 목록
+        var keepIds = req.getKeepPhotoIds(); // null 허용
+        boolean hasKeepRule = (keepIds != null);
+
+        // 3) 남길 사진만 필터링
+        List<CommunityPhoto> photosToKeep;
+        if (hasKeepRule) {
+            var keepIdSet = new java.util.HashSet<Long>(keepIds);
+            photosToKeep = existingPhotos.stream()
+                    .filter(p -> keepIdSet.contains(p.getId()))
+                    .toList();
+
+            // keepIds에는 있는데 DB에는 없는 id가 들어온 경우도 있을 수 있으므로
+            // 필요하면 여기에서 검증/예외 처리도 가능
+        } else {
+            // keepPhotoIds가 null인 경우: "기존 이미지는 유지" 기본값
+            photosToKeep = existingPhotos;
+        }
+
+        // 4) 삭제할 사진들 제거 (DB)
+        if (hasKeepRule) {
+            // 유지 목록에 없는 것만 삭제
+            var toDelete = existingPhotos.stream()
+                    .filter(p -> !photosToKeep.contains(p))
+                    .toList();
+            photoRepository.deleteAllInBatch(toDelete);
+        }
+
+        // 5) 정렬 순서를 다시 매기기 (기존 유지 + 새 이미지 이어붙일 거라 기준 잡기)
+        int order = 0;
+        for (var photo : photosToKeep) {
+            photo.setSortOrder(order++);
+        }
+
+        // 6) 새 이미지 추가
+        if (req.getNewImages() != null) {
+            for (var file : req.getNewImages()) {
+                if (file == null || file.isEmpty()) continue;
+
+                var url = imageStoragePort.store(file);
+
+                var photo = new CommunityPhoto();
+                photo.setPost(post);
+                photo.setUrl(url);
+                photo.setSortOrder(order++);
+                photoRepository.save(photo);
+            }
+        }
     }
 
     @Override
