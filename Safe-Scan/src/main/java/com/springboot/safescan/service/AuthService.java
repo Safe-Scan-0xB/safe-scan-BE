@@ -26,6 +26,12 @@ public class AuthService {
     }
 
     public String signup(String userId, String password) {
+
+        if (userRepository.findByUserId(userId).isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
+        }
+
+
         User user = new User();
         user.setUserId(userId);
         user.setPassword(password);
