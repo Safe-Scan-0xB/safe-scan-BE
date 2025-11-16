@@ -6,6 +6,8 @@ import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface PostRepository extends JpaRepository<CommunityPost, Long> {
 
     @Query(
@@ -35,4 +37,14 @@ public interface PostRepository extends JpaRepository<CommunityPost, Long> {
     Page<CommunityPost> searchNative(@Param("categoryId") Long categoryId,
                                      @Param("pattern") String pattern,
                                      Pageable pageable);
+
+
+    @Query("""
+        SELECT p
+        FROM CommunityPost p
+        LEFT JOIN CommunityComment c ON c.post = p
+        GROUP BY p
+        ORDER BY COUNT(c) DESC, p.viewCount DESC
+    """)
+    List<CommunityPost> findHotPosts(Pageable pageable);
 }
