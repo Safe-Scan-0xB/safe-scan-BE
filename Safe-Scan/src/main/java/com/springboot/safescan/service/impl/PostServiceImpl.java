@@ -247,6 +247,28 @@ public class PostServiceImpl implements PostService {
         commentRepository.delete(comment);
     }
 
+    @Override
+    public List<PostSummaryResponse> listHotPosts(int limit) {
+        // 최소 1개는 나오도록 방어코드
+        int size = Math.max(1, limit);
+
+        Pageable pageable = PageRequest.of(0, size);
+        var posts = postRepository.findHotPosts(pageable);
+
+        // 기존 listPosts에서 쓰던 방식 그대로 재사용
+        return posts.stream().map(p -> {
+            int commentCount = (int) commentRepository.countByPost(p);
+            var firstImage = photoRepository.findTop1ByPostOrderBySortOrderAsc(p)
+                    .stream().map(CommunityPhoto::getUrl).toList();
+            return PostMapper.toSummary(
+                    p,
+                    p.getCategory().getCategoryName(),
+                    commentCount,
+                    firstImage
+            );
+        }).toList();
+    }
+
     class SecurityUtil {
 
         static String getCurrentUserId() {
