@@ -40,4 +40,4 @@ out/
 uploads/
 
 ###env file
-src/main/resources/.env
+.env
