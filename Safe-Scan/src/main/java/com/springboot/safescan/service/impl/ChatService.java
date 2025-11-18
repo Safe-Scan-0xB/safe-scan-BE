@@ -80,6 +80,7 @@ public class ChatService {
         return json.substring(first + 1, second);
     }
 
+<<<<<<< HEAD
     public ChatHistoryResponse getHistory(String userId, Long cursor, int size) {
 
         LocalDateTime from = LocalDateTime.now().minusHours(24);
@@ -122,5 +123,4 @@ public class ChatService {
                 nextCursor
         );
     }
-
 }

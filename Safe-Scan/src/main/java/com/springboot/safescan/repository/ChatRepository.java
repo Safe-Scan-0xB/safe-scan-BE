@@ -14,7 +14,6 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
             Long cursor,
             Pageable pageable
     );
-
     List<Chat> findByUserIdAndTimestampAfterOrderByTimestampAsc(
             String userId,
             LocalDateTime after
