@@ -80,15 +80,13 @@ public class ChatService {
         return json.substring(first + 1, second);
     }
 
-<<<<<<< HEAD
     public ChatHistoryResponse getHistory(String userId, Long cursor, int size) {
 
         LocalDateTime from = LocalDateTime.now().minusHours(24);
         Pageable pageable = PageRequest.of(0, size);
 
         List<Chat> chats;
-
-        // 첫 로드: 최신 size개
+      
         if (cursor == null) {
             chats = chatRepo.findTop20ByUserIdOrderByIdDesc(userId);
         }
@@ -98,13 +96,11 @@ public class ChatService {
             );
         }
 
-        // 24시간 필터 적용
         List<Chat> filtered = chats.stream()
                 .filter(c -> c.getTimestamp().isAfter(from))
                 .sorted(Comparator.comparing(Chat::getId))
                 .toList();
 
-        // 다음 커서 계산
         Long nextCursor = chats.isEmpty()
                 ? null
                 : chats.get(chats.size() - 1).getId();
