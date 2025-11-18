@@ -47,7 +47,7 @@ public class SecurityConfig {
                 // JWT 필터
                 .addFilterBefore(
                         new JwtAuthenticationFilter(jwtTokenProvider),
-                        UsernamePasswordAuthenticationFilter.class
+                        org.springframework.security.web.authentication.AnonymousAuthenticationFilter.class
                 );
 
         return http.build();
