@@ -17,9 +17,13 @@ public class ChatController {
 
     // 1) 지난 24시간 대화 조회
     @GetMapping
-    public ChatHistoryResponse getHistory(Authentication auth) {
+    public ChatHistoryResponse getHistory(
+            Authentication auth,
+            @RequestParam(required = false) Long cursor,
+            @RequestParam(defaultValue = "10") int size)
+    {
         String userId = (String) auth.getPrincipal();
-        return chatService.getHistory(userId);
+        return chatService.getHistory(userId, cursor, size);
     }
 
     // 2) 챗봇에게 질문 → 답변 생성
