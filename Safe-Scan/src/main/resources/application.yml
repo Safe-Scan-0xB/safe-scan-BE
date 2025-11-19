@@ -38,3 +38,6 @@ phishing:
   api:
     url: "https://api.odcloud.kr/api/15109780/v1/uddi:707478dd-938f-4155-badb-fae6202ee7ed"
     key: ${PHISHING_API_KEY}
+
+openai:
+  api-key: ${OPENAI_API_KEY}
