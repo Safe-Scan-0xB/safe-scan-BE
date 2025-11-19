@@ -3,8 +3,11 @@ package com.springboot.safescan.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import com.springboot.safescan.domain.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity @Table(name = "community_posts")
 @Getter @Setter @NoArgsConstructor
@@ -32,6 +35,13 @@ public class CommunityPost {
 
     @Column(name = "view_count", nullable = false)
     private int viewCount = 0;
+
+    @OneToMany(
+            mappedBy = "post",
+            cascade = CascadeType.ALL,      // 부모 저장/삭제 시 자식도 같이
+            orphanRemoval = true            // 컬렉션에서 제거되면 DELETE
+    )
+    private List<CommunityPhoto> photos = new ArrayList<>();
 
     public void increaseView() { this.viewCount++; }
 }
