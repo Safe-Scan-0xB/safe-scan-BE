@@ -41,3 +41,6 @@ uploads/
 
 ###env file
 .env
+
+.idea/
+*.iml
