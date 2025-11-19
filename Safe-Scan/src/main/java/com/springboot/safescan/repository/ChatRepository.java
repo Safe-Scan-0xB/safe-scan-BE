@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ChatRepository extends JpaRepository<Chat, Long> {
-    List<Chat> findTop20ByUserIdOrderByIdDesc(String userId);
+    List<Chat> findTop20ByUserIdOrderByIdDesc(String userId, Pageable pageable);
     List<Chat> findByUserIdAndIdLessThanOrderByIdDesc(
             String userId,
             Long cursor,
@@ -18,4 +18,7 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
             String userId,
             LocalDateTime after
     );
+
+    // 24시간 지난 메시지 삭제용
+    void deleteByTimestampBefore(LocalDateTime before);
 }

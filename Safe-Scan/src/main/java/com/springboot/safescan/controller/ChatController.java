@@ -15,13 +15,13 @@ public class ChatController {
 
     private final ChatService chatService;
 
-    // 1) 지난 24시간 대화 조회
+    // 1) 지난 24시간 대화 조회 (커서 + size 기반)
     @GetMapping
     public ChatHistoryResponse getHistory(
             Authentication auth,
             @RequestParam(required = false) Long cursor,
-            @RequestParam(defaultValue = "10") int size)
-    {
+            @RequestParam(defaultValue = "10") int size
+    ) {
         String userId = (String) auth.getPrincipal();
         return chatService.getHistory(userId, cursor, size);
     }
