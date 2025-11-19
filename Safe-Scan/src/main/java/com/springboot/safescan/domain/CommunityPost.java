@@ -43,5 +43,12 @@ public class CommunityPost {
     )
     private List<CommunityPhoto> photos = new ArrayList<>();
 
+    @OneToMany(
+            mappedBy = "post",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<CommunityComment> replies = new ArrayList<>();
+
     public void increaseView() { this.viewCount++; }
 }
