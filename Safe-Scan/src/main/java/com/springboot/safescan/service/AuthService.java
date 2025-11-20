@@ -13,22 +13,6 @@ public class AuthService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public String signup(String userId, String password) {
-
-        // 1) 중복 아이디 체크
-        if (userRepository.findByUserId(userId).isPresent()) {
-            throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
-        }
-
-        // 2) 저장
-        User user = new User();
-        user.setUserId(userId);
-        user.setPassword(password);
-
-        userRepository.save(user);
-        return "회원가입 완료";
-    }
-
     public String login(String userId, String password) {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 회원"));
@@ -41,7 +25,19 @@ public class AuthService {
         return jwtTokenProvider.createToken(userId);
     }
 
+    public String signup(String userId, String password) {
 
+        if (userRepository.findByUserId(userId).isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
+        }
+
+
+        User user = new User();
+        user.setUserId(userId);
+        user.setPassword(password);
+        userRepository.save(user);
+        return "회원가입 완료";
+    }
 }
 
 

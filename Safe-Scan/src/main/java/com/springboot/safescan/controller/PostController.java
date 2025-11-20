@@ -57,6 +57,14 @@ public class PostController {
         postService.deletePost(id);
     }
 
+    // HOT 게시글 조회
+    @GetMapping("/hot")
+    public List<PostSummaryResponse> hotPosts(
+            @RequestParam(defaultValue = "3") int size
+    ) {
+        return postService.listHotPosts(size);
+    }
+
     // 댓글 등록
     @PostMapping("/{postId}/comments")
     public Long addComment(@PathVariable Long postId,
