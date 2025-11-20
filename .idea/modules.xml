@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Safe-Scan.iml" filepath="$PROJECT_DIR$/.idea/modules/Safe-Scan.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Safe-Scan.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Safe-Scan.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Safe-Scan.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Safe-Scan.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/safe-scan-BE.iml" filepath="$PROJECT_DIR$/.idea/safe-scan-BE.iml" />
     </modules>
   </component>
 </project>
