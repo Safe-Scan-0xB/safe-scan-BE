@@ -38,6 +38,14 @@ public class SecurityConfig {
                                 "/v3/api-docs.yaml"
                         ).permitAll()
 
+                        .requestMatchers(
+                                "/static/**",
+                                "/uploads/**",
+                                "/images/**",
+                                "/css/**",
+                                "/js/**"
+                        ).permitAll()
+
                         // 인증 불필요 (로그인/회원가입)
                         .requestMatchers("/api/auth/**").permitAll()
 
