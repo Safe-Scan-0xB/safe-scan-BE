@@ -36,7 +36,7 @@ public class AuthService {
         user.setUserId(userId);
         user.setPassword(password);
         userRepository.save(user);
-        return "회원가입 완료";
+        return jwtTokenProvider.createToken(userId);
     }
 }
 
