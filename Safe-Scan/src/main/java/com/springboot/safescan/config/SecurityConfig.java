@@ -13,6 +13,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -69,13 +71,37 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowCredentials(true); // 쿠키/인증정보 허용
-        config.addAllowedOrigin("http://localhost:5173");
+        // 쿠키 / 인증 정보 허용 (JWT 포함)
+        config.setAllowCredentials(true);
+
+        // 프론트 개발 환경
+        config.setAllowedOriginPatterns(
+                Arrays.asList(
+                        "http://localhost:5173",        // Vite dev
+                        "https://*.vercel.app",         // Vercel 배포
+                        "https://safe-scan.site",       // 실제 배포 도메인
+                        "https://www.safe-scan.site"    // www 도메인
+                )
+        );
+
+        // 헤더/메서드 전체 허용
         config.addAllowedHeader("*");
-        config.addAllowedMethod("*");  // GET, POST, PATCH, DELETE 모두 허용
+        config.addAllowedMethod("*");
+
+        // Authorization, Content-Type 등 명시 허용
+        config.setAllowedHeaders(Arrays.asList(
+                "Authorization",
+                "Content-Type",
+                "X-Requested-With",
+                "Accept"
+        ));
+
+        // Preflight 캐싱
+        config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
     }
+
 }
