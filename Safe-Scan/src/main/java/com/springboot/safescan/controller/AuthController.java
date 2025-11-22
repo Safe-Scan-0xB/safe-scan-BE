@@ -17,7 +17,7 @@ public class AuthController {
     @PostMapping("/signin")
     public Map<String, String> login(@RequestBody LoginRequest req) {
         String token = authService.login(req.userId(), req.password());
-        return Map.of("token!", token);
+        return Map.of("token", token);
     }
 
     @PostMapping("/signup")
