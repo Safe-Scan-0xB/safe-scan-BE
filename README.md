@@ -17,35 +17,28 @@
 |:------:|:------:|:------:|
 | <img src="https://github.com/user-attachments/assets/c1c2b1e3-656d-4712-98ab-a15e91efa2da" alt="이동규" width="150"> | <img src="https://github.com/user-attachments/assets/78ec4937-81bb-4637-975d-631eb3c4601e" alt="신유승" width="150"> | <img src="https://github.com/user-attachments/assets/78ce1062-80a0-4edb-bf6b-5efac9dd992e" alt="김나연" width="150"> |
 | BE | BE | BE |
-| [GitHub](https://github.com/todaysunny612) | (본인에 맞게 채우시면 됩니다) | (본인에 맞게 채우시면 됩니다) |
+| [GitHub](https://github.com/todaysunny612) | [GitHub](https://github.com/ssuisig) | [GitHub]() |
 
 <br/>
 <br/>
 
 # 3. Key Features (주요 기능)
-- **회원가입**:
-  - 회원가입 시 DB에 유저정보가 등록됩니다.
 
 - **로그인**:
   - 사용자 인증 정보를 통해 로그인합니다.
 
-- **내 동아리 일정관리**:
-  - 캘린더 UI를 통해 동아리 관련 일정 추가&삭제가 가능합니다.
-  - 체크박스를 통해 종료되거나 이미 수행한 일정을 표시할 수 있습니다.
+- **악성 링크 실시간 위험도 조회**:
+  - KISA에서 제공하는 공공데이터 API를 활용하여 악성 URL을 실시간 검증할 수 있습니다.
+  - 신고 이력 데이터 기반 ‘안전/위험’ 등급을 제공합니다.
 
-- **동아리 찾기**:
-  - 대학 내 동아리를 검색할 수 있습니다.
-  - 검색 시 해당 동아리가 업로드한 홍보글이 보여집니다.
+- **커뮤니티 (사례 공유, 피해자 찾기) 기능**:
+  - 카테고리 기반으로 정보를 탐색 (피해자 찾기, 사례 공유 등)할 수 있습니다.
+  - HOT 게시판 제공 → 현재 가장 활발한 이슈를 즉시 파악할 수 있습니다.
 
-- **동아리 홍보**:
-  - 홍보글 등록을 통해 동아리를 홍보할 수 있습니다.
+- **AI 챗봇 (사전 예방, 사후 대처 안내)**:
+  - 자유로운 질의응답 → 상황설명 중심 접근 가능
+  - 위험 요소가 감지되면 명확하게 경고하고 사용자가 바로 실천할 수 있는 행동을 제시하도록 시스템 프롬프트를 적용하여 설계함
 
-- **동아리 만들기**:
-  - 새로운 동아리를 만들어 관리할 수 있습니다.
-
-- **동아리 프로필**:
-  - 동아리 홍보글에서 동아리 이름(링크)를 클릭하면 해당 동아리 프로필로 이동합니다.
-  - 동아리 프로필에서는 동아리 소개, 동아리 활동사진 갤러리, 동아리 홍보글 기록관 등을 볼 수 있습니다.
 
 <br/>
 <br/>
@@ -53,10 +46,9 @@
 # 4. Tasks & Responsibilities (작업 및 역할 분담)
 |  |  |  |
 |-----------------|-----------------|-----------------|
-| 이동규    |  <img src="https://github.com/user-attachments/assets/c1c2b1e3-656d-4712-98ab-a15e91efa2da" alt="이동규" width="100"> | <ul><li>프로젝트 계획 및 관리</li><li>팀 리딩 및 커뮤니케이션</li><li>커스텀훅 개발</li></ul>     |
-| 신유승   |  <img src="https://github.com/user-attachments/assets/78ec4937-81bb-4637-975d-631eb3c4601e" alt="신유승" width="100">| <ul><li>메인 페이지 개발</li><li>동아리 만들기 페이지 개발</li><li>커스텀훅 개발</li></ul> |
-| 김나연   |  <img src="https://github.com/user-attachments/assets/78ce1062-80a0-4edb-bf6b-5efac9dd992e" alt="김나연" width="100">    |<ul><li>홈 페이지 개발</li><li>로그인 페이지 개발</li><li>동아리 찾기 페이지 개발</li><li>동아리 프로필 페이지 개발</li><li>커스텀훅 개발</li></ul>  |
-| 이승준    |  <img src="https://github.com/user-attachments/assets/beea8c64-19de-4d91-955f-ed24b813a638" alt="이승준" width="100">    | <ul><li>회원가입 페이지 개발</li><li>마이 프로필 페이지 개발</li><li>커스텀훅 개발</li></ul>    |
+| 최희선    |  <img src="https://github.com/user-attachments/assets/c1c2b1e3-656d-4712-98ab-a15e91efa2da" alt="최희선" width="100"> | <ul><li>공공데이터 API 연결</li><li>AI 챗봇 API 연결</li></ul>     |
+| 전수연   |  <img src="https://github.com/user-attachments/assets/78ec4937-81bb-4637-975d-631eb3c4601e" alt="전수연" width="100">| <ul><li>커뮤니티 기능 구현</li><li>채팅 DB 구현</li></ul> |
+| 김민서   |  <img src="https://github.com/user-attachments/assets/78ce1062-80a0-4edb-bf6b-5efac9dd992e" alt="김민서" width="100">    |<ul><li>로그인 기능 구현</li><li>서비스 배포</li></ul>  |
 
 <br/>
 <br/>
@@ -65,26 +57,14 @@
 ## 5.1 Language
 |  |  |
 |-----------------|-----------------|
-| HTML5    |<img src="https://github.com/user-attachments/assets/2e122e74-a28b-4ce7-aff6-382959216d31" alt="HTML5" width="100">| 
-| CSS3    |   <img src="https://github.com/user-attachments/assets/c531b03d-55a3-40bf-9195-9ff8c4688f13" alt="CSS3" width="100">|
-| Javascript    |  <img src="https://github.com/user-attachments/assets/4a7d7074-8c71-48b4-8652-7431477669d1" alt="Javascript" width="100"> | 
-
-<br/>
-
-## 5.2 Frotend
-|  |  |  |
-|-----------------|-----------------|-----------------|
-| React    |  <img src="https://github.com/user-attachments/assets/e3b49dbb-981b-4804-acf9-012c854a2fd2" alt="React" width="100"> | 18.3.1    |
-| StyledComponents    |  <img src="https://github.com/user-attachments/assets/c9b26078-5d79-40cc-b120-69d9b3882786" alt="StyledComponents" width="100">| 6.1.12   |
-| MaterialUI    |  <img src="https://github.com/user-attachments/assets/75a46fa7-ebc0-4a9d-b648-c589f87c4b55" alt="MUI" width="100">    | 5.0.0  |
-| DayJs    |  <img src="https://github.com/user-attachments/assets/3632d7d6-8d43-4dd5-ba7a-501a2bc3a3e4" alt="DayJs" width="100">    | 1.11.12    |
+| Java    |<img src="https://github.com/user-attachments/assets/2e122e74-a28b-4ce7-aff6-382959216d31" alt="HTML5" width="100">| 
 
 <br/>
 
 ## 5.3 Backend
 |  |  |  |
 |-----------------|-----------------|-----------------|
-| Firebase    |  <img src="https://github.com/user-attachments/assets/1694e458-9bb0-4a0b-8fe6-8efc6e675fa1" alt="Firebase" width="100">    | 10.12.5    |
+| Springboot    |  <img src="https://github.com/user-attachments/assets/1694e458-9bb0-4a0b-8fe6-8efc6e675fa1" alt="Springboot" width="100">    | 10.12.5    |
 
 <br/>
 
@@ -99,23 +79,42 @@
 
 # 6. Project Structure (프로젝트 구조)
 ```plaintext
-project/
-├── public/
-│   ├── index.html           # HTML 템플릿 파일
-│   └── favicon.ico          # 아이콘 파일
+Safe-Scan/
+├── .gradle/                        # Gradle 빌드 캐시 디렉토리
+├── build/                          # 빌드 결과물 디렉토리
+├── gradle/                         # Gradle wrapper 설정
+│   └── ... 
 ├── src/
-│   ├── assets/              # 이미지, 폰트 등 정적 파일
-│   ├── components/          # 재사용 가능한 UI 컴포넌트
-│   ├── hooks/               # 커스텀 훅 모음
-│   ├── pages/               # 각 페이지별 컴포넌트
-│   ├── App.js               # 메인 애플리케이션 컴포넌트
-│   ├── index.js             # 엔트리 포인트 파일
-│   ├── index.css            # 전역 css 파일
-│   ├── firebaseConfig.js    # firebase 인스턴스 초기화 파일
-│   package-lock.json    # 정확한 종속성 버전이 기록된 파일로, 일관된 빌드를 보장
-│   package.json         # 프로젝트 종속성 및 스크립트 정의
-├── .gitignore               # Git 무시 파일 목록
-└── README.md                # 프로젝트 개요 및 사용법
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/springboot/safescan/
+│   │   │       ├── config/         # 전역 설정 (CORS, Security, Swagger 등)
+│   │   │       ├── controller/     # REST API 엔드포인트
+│   │   │       ├── domain/         # 엔티티(DB 모델)
+│   │   │       ├── dto/            # 데이터 전송 객체
+│   │   │       ├── mapper/         # Entity ↔ DTO 변환 매퍼
+│   │   │       ├── openAI/         # GPT API 연동 클래스
+│   │   │       ├── prompt/         # 시스템/기능 프롬프트 분리 관리
+│   │   │       ├── repository/     # JPA Repository
+│   │   │       ├── security/       # JWT, 인증·인가
+│   │   │       ├── service/        # 비즈니스 로직
+│   │   │       ├── util/           # 공용 유틸리티
+│   │   │       └── SafeScanApplication.java   # Spring Boot 메인 애플리케이션
+│   │   └── resources/
+│   │       ├── prompts/            # 프롬프트 텍스트 파일
+│   │       └── application.yml     # 환경 설정 파일
+│   └── test/                       # 테스트 코드
+├── uploads/                        # 이미지/파일 업로드 저장 디렉토리
+├── .env                            # 환경 변수 파일 (Git에서 제외 권장)
+├── .gitattributes
+├── .gitignore
+├── build.gradle                    # Gradle 빌드 스크립트
+├── gradlew                         # Unix용 Gradle 실행 파일
+├── gradlew.bat                     # Windows용 Gradle 실행 파일
+├── HELP.md
+├── settings.gradle                 # 멀티 프로젝트 및 Gradle 설정
+└── package.json                    # 필요 시 Node 기반 스크립트 / 툴링 사용
+
 ```
 
 <br/>
@@ -128,6 +127,12 @@ project/
 - Main Branch
   - 배포 가능한 상태의 코드를 유지합니다.
   - 모든 배포는 이 브랜치에서 이루어집니다.
+
+- develop Branch
+  - 서비스 개발의 기준(branch base) 역할을 합니다.
+  - 팀원들의 기능 브랜치가 모두 병합되는 통합 개발 브랜치입니다.
+  - 기능 구현이 완료되면 PR을 생성하여 코드 리뷰 후 머지합니다.
+  - Main으로 병합되기 전 최종 테스트 및 버그 수정이 이루어집니다.
   
 - {name} Branch
   - 팀원 각자의 개발 브랜치입니다.
@@ -135,71 +140,3 @@ project/
 
 <br/>
 <br/>
-
-
-# 9. 커밋 컨벤션
-## 기본 구조
-```
-type : subject
-
-body 
-```
-
-<br/>
-
-## type 종류
-```
-feat : 새로운 기능 추가
-fix : 버그 수정
-docs : 문서 수정
-style : 코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우
-refactor : 코드 리펙토링
-test : 테스트 코드, 리펙토링 테스트 코드 추가
-chore : 빌드 업무 수정, 패키지 매니저 수정
-```
-
-<br/>
-
-## 커밋 이모지
-```
-== 코드 관련
-📝	코드 작성
-🔥	코드 제거
-🔨	코드 리팩토링
-💄	UI / style 변경
-
-== 문서&파일
-📰	새 파일 생성
-🔥	파일 제거
-📚	문서 작성
-
-== 버그
-🐛	버그 리포트
-🚑	버그를 고칠 때
-
-== 기타
-🐎	성능 향상
-✨	새로운 기능 구현
-💡	새로운 아이디어
-🚀	배포
-```
-
-<br/>
-
-## 커밋 예시
-```
-== ex1
-✨Feat: "회원 가입 기능 구현"
-
-SMS, 이메일 중복확인 API 개발
-
-== ex2
-📚chore: styled-components 라이브러리 설치
-
-UI개발을 위한 라이브러리 styled-components 설치
-```
-
-<br/>
-<br/>
-
-# 10. 컨벤션 수행 결과
