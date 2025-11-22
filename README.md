@@ -3,16 +3,16 @@
 </a>
 <br/>
 <br/>
-# 1. Project Overview (프로젝트 개요)
-- 프로젝트 이름: Safe-Scan
-- 프로젝트 설명: SafeScan 은 공공 데이터와 AI 분석, 국민 참여 제보를 기반으로 수상한 접촉을 검증하고 위험을 확인할 수 있는 플랫폼입니다. 사용자가 위험을 감지하고, 정보를 공유, 확인하여 범죄로 이어지기 전에 차단할 수 있도록 지원합니다.
+# 1. Project Overview (프로젝트 개요)<br>
+- 프로젝트 이름: Safe-Scan<br>
+- 프로젝트 설명: SafeScan 은 공공 데이터와 AI 분석, 국민 참여 제보를 기반으로 수상한 접촉을 검증하고 위험을 확인할 수 있는 플랫폼입니다.<br> 사용자가 위험을 감지하고, 정보를 공유, 확인하여 범죄로 이어지기 전에 차단할 수 있도록 지원합니다.
 <br/>
 <br/>
-# 2. BE Team Members (팀원 및 팀 소개)
-| 최희선 | 전수연 | 김민서 |
-|:------:|:------:|:------:|
-| <img src="https://github.com/user-attachments/assets/c1c2b1e3-656d-4712-98ab-a15e91efa2da" alt="최희선" width="150"> | <img src="https://github.com/user-attachments/assets/78ec4937-81bb-4637-975d-631eb3c4601e" alt="전수연" width="150"> | <img src="https://github.com/user-attachments/assets/78ce1062-80a0-4edb-bf6b-5efac9dd992e" alt="김민서" width="150"> |
-| BE | BE | BE |
+# 2. BE Team Members (팀원 및 팀 소개)<br>
+| 최희선 | 전수연 | 김민서 |<br>
+|:------:|:------:|:------:|<br>
+| <img src="https://github.com/user-attachments/assets/c1c2b1e3-656d-4712-98ab-a15e91efa2da" alt="최희선" width="150"> | <img src="https://github.com/user-attachments/assets/78ec4937-81bb-4637-975d-631eb3c4601e" alt="전수연" width="150"> | <img src="https://github.com/user-attachments/assets/78ce1062-80a0-4edb-bf6b-5efac9dd992e" alt="김민서" width="150"> |<br>
+| BE | BE | BE |<br>
 | [GitHub](https://github.com/todaysunny612) | [GitHub](https://github.com/ssuisig) | [GitHub]() |
 
 <br/>
@@ -48,18 +48,20 @@
 
 <br/>
 <br/>
-# 5. Technology Stack (기술 스택)
-## 5.1 Language
-|  |  |
-|-----------------|-----------------|
-| Java    |<img src="[https://github.com/user-attachments/assets/2e122e74-a28b-4ce7-aff6-382959216d31](https://github.com/user-attachments/assets/70ce61ce-aedc-4356-abe9-f1f11b70b399)" alt="HTML5" width="100">| 
+# 5. Technology Stack (기술 스택)<br>
+## 5.1 Language<br>
+|  |  |<br>
+|-----------------|-----------------|<br>
+| Java    |<img src="https://github.com/user-attachments/assets/5ed8f401-9129-4ae4-abb5-abefc9f18951" alt="Java" width="100"/>| 
+
 
 <br/>
 
 ## 5.3 Backend
 |  |  |  |
 |-----------------|-----------------|-----------------|
-| Springboot    |  <img src="[https://github.com/user-attachments/assets/1694e458-9bb0-4a0b-8fe6-8efc6e675fa1](https://github.com/user-attachments/assets/2f352a4c-277a-4db9-a7d6-cd0022dfe6f2)" alt="Springboot" width="100">    | 10.12.5    |
+| Springboot    |  <img alt="springbootImage2" src="https://github.com/user-attachments/assets/e70e91ac-a3f1-4e45-a4f9-7555b008593b"  alt="Springboot" width="100"/>   | 10.12.5    |
+
 
 <br/>
 
