@@ -1,0 +1,28 @@
+# === IDE / Editor ===
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# === Build / Output ===
+Safe-Scan/build/
+out/
+target/
+dist/
+*.log
+
+# 하위 모듈 내 build 및 gradle 캐시도 무시
+**/build/
+**/.gradle/
+
+# === Environment / Secrets ===
+.env
+*.env
+application-secret.yml
+application-prod.yml
+
+# === Node (if front connected) ===
+node_modules/
+
+# === OS / Misc ===
+Thumbs.db
